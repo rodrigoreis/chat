@@ -15,7 +15,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat.Models\Chat.Models.csproj" />
-    <ProjectReference Include="..\Chat.Repositories\Chat.Repositories.csproj" />
+    <ProjectReference Include="..\Chat.Repositories.Abstractions\Chat.Repositories.Abstractions.csproj" />
+    <ProjectReference Include="..\Chat.Repositories.DependencyInjections\Chat.Repositories.DependencyInjections.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,11 @@
 ﻿using Chat.Models;
+using Chat.Repositories.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Chat.Repositories
 {
-    public class ConnectionsRepository
+    public class ConnectionsRepository : IConnectionsRepository
     {
         private readonly Dictionary<string, User> connections
             = new Dictionary<string, User>();

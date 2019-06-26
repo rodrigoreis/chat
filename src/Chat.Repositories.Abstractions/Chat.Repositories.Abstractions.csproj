@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat.Models\Chat.Models.csproj" />
-    <ProjectReference Include="..\Chat.Repositories.Abstractions\Chat.Repositories.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
