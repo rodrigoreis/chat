@@ -1,37 +1,39 @@
-using Chat.Hubs;
 using Chat.Repositories.DependencyInjections;
+using Chat.Ui.Hub;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace Chat
+namespace Chat.Ui
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            services
+                .AddRouting(options =>
+                    {
+                        options.LowercaseUrls = true;
+                        options.LowercaseQueryStrings = true;
+                    }
+                )
+                .AddRazorPages()
+                .AddRazorRuntimeCompilation();
 
             services.AddRepositories();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSignalR();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -45,14 +47,17 @@ namespace Chat
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseRouting();
+            app.UseAuthorization();
 
-            app.UseMvc();
-
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ChatHub>("/chat");
-            });
+            app.UseEndpoints
+            (
+                endpoints =>
+                {
+                    endpoints.MapRazorPages();
+                    endpoints.MapHub<ChatHub>("/chat");
+                }
+            );
         }
     }
 }
